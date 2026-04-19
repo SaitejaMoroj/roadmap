@@ -1,0 +1,962 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>MAANG SDE-2 Roadmap</title>
+<style>
+  @import url('https://fonts.googleapis.com/css2?family=Space+Mono:wght@400;700&family=Sora:wght@300;400;600;700;800&display=swap');
+
+  :root {
+    --bg: #0a0a0f;
+    --surface: #12121a;
+    --surface2: #1a1a26;
+    --border: #2a2a3a;
+    --text: #e8e8f0;
+    --muted: #7a7a9a;
+    --teal: #00e5c3;
+    --purple: #a78bfa;
+    --amber: #fbbf24;
+    --coral: #f87171;
+    --blue: #60a5fa;
+    --green: #34d399;
+    --pink: #f472b6;
+  }
+
+  * { margin: 0; padding: 0; box-sizing: border-box; }
+
+  body {
+    background: var(--bg);
+    color: var(--text);
+    font-family: 'Sora', sans-serif;
+    line-height: 1.6;
+    padding: 2rem 1rem;
+  }
+
+  .container { max-width: 900px; margin: 0 auto; }
+
+  /* HEADER */
+  .header {
+    text-align: center;
+    margin-bottom: 3rem;
+    padding: 2.5rem;
+    background: var(--surface);
+    border: 1px solid var(--border);
+    border-radius: 16px;
+    position: relative;
+    overflow: hidden;
+  }
+  .header::before {
+    content: '';
+    position: absolute;
+    top: 0; left: 0; right: 0;
+    height: 3px;
+    background: linear-gradient(90deg, var(--teal), var(--purple), var(--amber));
+  }
+  .header h1 {
+    font-size: 1.8rem;
+    font-weight: 800;
+    letter-spacing: -0.5px;
+    margin-bottom: 0.5rem;
+  }
+  .header h1 span { color: var(--teal); }
+  .header p { color: var(--muted); font-size: 0.9rem; }
+  .badge-row {
+    display: flex;
+    gap: 0.6rem;
+    justify-content: center;
+    flex-wrap: wrap;
+    margin-top: 1rem;
+  }
+  .badge {
+    font-family: 'Space Mono', monospace;
+    font-size: 0.7rem;
+    padding: 0.3rem 0.8rem;
+    border-radius: 999px;
+    border: 1px solid;
+  }
+  .badge.teal { color: var(--teal); border-color: var(--teal); background: rgba(0,229,195,0.08); }
+  .badge.purple { color: var(--purple); border-color: var(--purple); background: rgba(167,139,250,0.08); }
+  .badge.amber { color: var(--amber); border-color: var(--amber); background: rgba(251,191,36,0.08); }
+
+  /* STAGE */
+  .stage {
+    margin-bottom: 2rem;
+    border: 1px solid var(--border);
+    border-radius: 16px;
+    overflow: hidden;
+    background: var(--surface);
+  }
+
+  .stage-header {
+    padding: 1rem 1.5rem;
+    display: flex;
+    align-items: center;
+    gap: 1rem;
+    border-bottom: 1px solid var(--border);
+  }
+  .stage-num {
+    font-family: 'Space Mono', monospace;
+    font-size: 0.75rem;
+    font-weight: 700;
+    width: 32px; height: 32px;
+    border-radius: 50%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    flex-shrink: 0;
+  }
+  .stage-title-block h2 {
+    font-size: 1rem;
+    font-weight: 700;
+  }
+  .stage-title-block p {
+    font-size: 0.78rem;
+    color: var(--muted);
+    margin-top: 0.1rem;
+  }
+
+  .stage-body { padding: 1.25rem 1.5rem; }
+
+  /* COLOR THEMES */
+  .s1 .stage-header { background: rgba(0,229,195,0.06); }
+  .s1 .stage-num { background: rgba(0,229,195,0.15); color: var(--teal); }
+  .s1 .stage-title-block h2 { color: var(--teal); }
+
+  .s2 .stage-header { background: rgba(167,139,250,0.06); }
+  .s2 .stage-num { background: rgba(167,139,250,0.15); color: var(--purple); }
+  .s2 .stage-title-block h2 { color: var(--purple); }
+
+  .s3 .stage-header { background: rgba(96,165,250,0.06); }
+  .s3 .stage-num { background: rgba(96,165,250,0.15); color: var(--blue); }
+  .s3 .stage-title-block h2 { color: var(--blue); }
+
+  .s4 .stage-header { background: rgba(248,113,113,0.06); }
+  .s4 .stage-num { background: rgba(248,113,113,0.15); color: var(--coral); }
+  .s4 .stage-title-block h2 { color: var(--coral); }
+
+  .s5 .stage-header { background: rgba(251,191,36,0.06); }
+  .s5 .stage-num { background: rgba(251,191,36,0.15); color: var(--amber); }
+  .s5 .stage-title-block h2 { color: var(--amber); }
+
+  .s6 .stage-header { background: rgba(52,211,153,0.06); }
+  .s6 .stage-num { background: rgba(52,211,153,0.15); color: var(--green); }
+  .s6 .stage-title-block h2 { color: var(--green); }
+
+  .s7 .stage-header { background: rgba(244,114,182,0.06); }
+  .s7 .stage-num { background: rgba(244,114,182,0.15); color: var(--pink); }
+  .s7 .stage-title-block h2 { color: var(--pink); }
+
+  /* RESOURCE CARDS */
+  .resources { display: flex; flex-direction: column; gap: 0.75rem; }
+
+  .resource-card {
+    background: var(--surface2);
+    border: 1px solid var(--border);
+    border-radius: 10px;
+    padding: 0.9rem 1.1rem;
+    display: flex;
+    gap: 1rem;
+    align-items: flex-start;
+    text-decoration: none;
+    color: inherit;
+    transition: border-color 0.2s, background 0.2s;
+  }
+  .resource-card:hover {
+    border-color: #3a3a5a;
+    background: #1e1e2e;
+  }
+
+  .rc-icon {
+    font-size: 1.4rem;
+    flex-shrink: 0;
+    margin-top: 0.1rem;
+  }
+  .rc-body { flex: 1; min-width: 0; }
+  .rc-top {
+    display: flex;
+    align-items: center;
+    gap: 0.5rem;
+    flex-wrap: wrap;
+    margin-bottom: 0.25rem;
+  }
+  .rc-name {
+    font-weight: 600;
+    font-size: 0.9rem;
+  }
+  .rc-tag {
+    font-family: 'Space Mono', monospace;
+    font-size: 0.65rem;
+    padding: 0.15rem 0.5rem;
+    border-radius: 4px;
+    border: 1px solid;
+  }
+  .tag-free { color: var(--green); border-color: var(--green); background: rgba(52,211,153,0.1); }
+  .tag-yt { color: var(--coral); border-color: var(--coral); background: rgba(248,113,113,0.1); }
+  .tag-must { color: var(--amber); border-color: var(--amber); background: rgba(251,191,36,0.1); }
+  .tag-doc { color: var(--blue); border-color: var(--blue); background: rgba(96,165,250,0.1); }
+
+  .rc-desc {
+    font-size: 0.8rem;
+    color: var(--muted);
+    line-height: 1.5;
+  }
+  .rc-link {
+    font-family: 'Space Mono', monospace;
+    font-size: 0.7rem;
+    color: var(--teal);
+    margin-top: 0.3rem;
+    word-break: break-all;
+    display: block;
+  }
+
+  /* GRID */
+  .resource-grid {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 0.75rem;
+  }
+  @media (max-width: 600px) {
+    .resource-grid { grid-template-columns: 1fr; }
+  }
+
+  /* TOPIC LIST */
+  .topic-list {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 0.5rem;
+    margin-bottom: 1rem;
+  }
+  .topic-chip {
+    font-family: 'Space Mono', monospace;
+    font-size: 0.72rem;
+    padding: 0.3rem 0.7rem;
+    border-radius: 6px;
+    background: var(--surface2);
+    border: 1px solid var(--border);
+    color: var(--muted);
+  }
+  .topic-chip.current {
+    color: var(--teal);
+    border-color: var(--teal);
+    background: rgba(0,229,195,0.08);
+  }
+
+  /* DIVIDER */
+  .divider {
+    display: flex;
+    align-items: center;
+    gap: 1rem;
+    margin: 0.5rem 0 1rem;
+    color: var(--muted);
+    font-size: 0.78rem;
+    font-family: 'Space Mono', monospace;
+  }
+  .divider::before, .divider::after {
+    content: '';
+    flex: 1;
+    height: 1px;
+    background: var(--border);
+  }
+
+  /* NOTE BOX */
+  .note {
+    border-radius: 8px;
+    padding: 0.8rem 1rem;
+    font-size: 0.82rem;
+    margin-bottom: 1rem;
+    border-left: 3px solid;
+    line-height: 1.6;
+  }
+  .note.amber { background: rgba(251,191,36,0.06); border-color: var(--amber); color: #e8d5a3; }
+  .note.teal { background: rgba(0,229,195,0.06); border-color: var(--teal); color: #a3e8de; }
+  .note.coral { background: rgba(248,113,113,0.06); border-color: var(--coral); color: #e8a3a3; }
+
+  /* ARROW */
+  .arrow {
+    text-align: center;
+    color: var(--border);
+    font-size: 1.5rem;
+    margin: 0.25rem 0;
+  }
+
+  /* MILESTONE */
+  .milestone {
+    display: flex;
+    align-items: center;
+    gap: 0.8rem;
+    background: var(--surface2);
+    border: 1px dashed var(--border);
+    border-radius: 10px;
+    padding: 0.9rem 1.1rem;
+    margin-top: 1rem;
+  }
+  .milestone-icon { font-size: 1.3rem; flex-shrink: 0; }
+  .milestone-text { font-size: 0.82rem; }
+  .milestone-text strong { display: block; font-size: 0.88rem; margin-bottom: 0.15rem; }
+
+  /* TIMELINE */
+  .timeline-bar {
+    display: flex;
+    margin: 2rem 0;
+    border: 1px solid var(--border);
+    border-radius: 10px;
+    overflow: hidden;
+  }
+  .tl-seg {
+    flex: 1;
+    padding: 0.7rem 0.5rem;
+    text-align: center;
+    font-size: 0.7rem;
+    font-family: 'Space Mono', monospace;
+    border-right: 1px solid var(--border);
+    line-height: 1.4;
+  }
+  .tl-seg:last-child { border-right: none; }
+  .tl-seg strong { display: block; font-size: 0.65rem; margin-bottom: 0.2rem; color: var(--muted); }
+
+  /* FOOTER */
+  .footer {
+    margin-top: 2rem;
+    padding: 1.5rem;
+    background: var(--surface);
+    border: 1px solid var(--border);
+    border-radius: 16px;
+    text-align: center;
+  }
+  .footer h3 { font-size: 1rem; margin-bottom: 0.5rem; color: var(--amber); }
+  .footer p { font-size: 0.82rem; color: var(--muted); line-height: 1.7; }
+</style>
+</head>
+<body>
+<div class="container">
+
+  <!-- HEADER -->
+  <div class="header">
+    <h1>Beginner → <span>MAANG SDE-2</span> Roadmap</h1>
+    <p>Crystal clear · Every resource linked · C++ for DSA · Python for projects</p>
+    <div class="badge-row">
+      <span class="badge teal">Amazon</span>
+      <span class="badge purple">Google</span>
+      <span class="badge amber">Meta</span>
+      <span class="badge teal">Microsoft</span>
+      <span class="badge purple">3–4 Years</span>
+      <span class="badge amber">100% Free Resources</span>
+    </div>
+  </div>
+
+  <!-- TIMELINE BAR -->
+  <div class="timeline-bar">
+    <div class="tl-seg" style="background:rgba(0,229,195,0.08);color:var(--teal)">
+      <strong>Now → M6</strong>C++ + CS<br>Basics + DSA<br>Phase 1&2
+    </div>
+    <div class="tl-seg" style="background:rgba(167,139,250,0.08);color:var(--purple)">
+      <strong>M6 → M10</strong>DSA Phase 3<br>+ 1st Switch<br>6–12 LPA
+    </div>
+    <div class="tl-seg" style="background:rgba(96,165,250,0.08);color:var(--blue)">
+      <strong>M10 → M18</strong>System Design<br>LLD + Python<br>Projects
+    </div>
+    <div class="tl-seg" style="background:rgba(248,113,113,0.08);color:var(--coral)">
+      <strong>M18 → M24</strong>2nd Switch<br>15–25 LPA<br>Mock grind
+    </div>
+    <div class="tl-seg" style="background:rgba(52,211,153,0.08);color:var(--green)">
+      <strong>Year 3–4</strong>MAANG<br>SDE-2<br>25–45 LPA
+    </div>
+  </div>
+
+  <!-- STAGE 1 -->
+  <div class="stage s1">
+    <div class="stage-header">
+      <div class="stage-num">1</div>
+      <div class="stage-title-block">
+        <h2>C++ Mastery for DSA (Month 1–2)</h2>
+        <p>Learn C++ deeply enough to solve any DSA problem — don't skip this</p>
+      </div>
+    </div>
+    <div class="stage-body">
+      <div class="note amber">You're already using C++ — good. But make sure you know STL deeply. Without STL you'll waste 15 min in interviews just writing code you should already know.</div>
+      <div class="topic-list">
+        <span class="topic-chip current">Vectors & arrays</span>
+        <span class="topic-chip">Maps & sets</span>
+        <span class="topic-chip">Pairs & tuples</span>
+        <span class="topic-chip">STL sort, min, max</span>
+        <span class="topic-chip">Priority queue</span>
+        <span class="topic-chip">Stack & queue</span>
+        <span class="topic-chip">OOP basics</span>
+        <span class="topic-chip">Pointers & references</span>
+        <span class="topic-chip">Time & space complexity</span>
+      </div>
+      <div class="divider">Learn from</div>
+      <div class="resources">
+        <a class="resource-card" href="https://www.youtube.com/watch?v=8jLOx1hD3_o" target="_blank">
+          <div class="rc-icon">▶</div>
+          <div class="rc-body">
+            <div class="rc-top">
+              <span class="rc-name">C++ STL Full Course — Luv</span>
+              <span class="rc-tag tag-free">FREE</span>
+              <span class="rc-tag tag-yt">YouTube</span>
+              <span class="rc-tag tag-must">MUST WATCH</span>
+            </div>
+            <div class="rc-desc">Covers all STL containers you'll use in every DSA problem — vectors, maps, sets, priority_queue. Interview focused.</div>
+            <span class="rc-link">youtube.com/watch?v=8jLOx1hD3_o</span>
+          </div>
+        </a>
+        <a class="resource-card" href="https://www.youtube.com/playlist?list=PLauivoElc3ggagradg8MfOZreCMmXMmJ-" target="_blank">
+          <div class="rc-icon">▶</div>
+          <div class="rc-body">
+            <div class="rc-top">
+              <span class="rc-name">C++ Full Course — Apna College</span>
+              <span class="rc-tag tag-free">FREE</span>
+              <span class="rc-tag tag-yt">YouTube</span>
+            </div>
+            <div class="rc-desc">Beginner friendly. Great for OOP, pointers, and syntax. Watch at 1.5x speed once you're comfortable with basics.</div>
+            <span class="rc-link">youtube.com/playlist?list=PLauivoElc3ggagradg8MfOZreCMmXMmJ-</span>
+          </div>
+        </a>
+      </div>
+    </div>
+  </div>
+
+  <div class="arrow">↓</div>
+
+  <!-- STAGE 2 -->
+  <div class="stage s2">
+    <div class="stage-header">
+      <div class="stage-num">2</div>
+      <div class="stage-title-block">
+        <h2>DSA — Phases 1, 2, 3 (Month 1–10)</h2>
+        <p>Your main job right now — Padho with Pratyush + MAANG sheet in C++</p>
+      </div>
+    </div>
+    <div class="stage-body">
+      <div class="note teal">You are already doing this correctly. Pratyush videos → immediately solve MAANG sheet problems. Do NOT separate learning and solving. Solve same day.</div>
+      <div class="divider">Phase 1 — Foundation (months 1–4)</div>
+      <div class="topic-list">
+        <span class="topic-chip current">Two Pointers ← YOU ARE HERE</span>
+        <span class="topic-chip">Sliding Window</span>
+        <span class="topic-chip">Binary Search</span>
+        <span class="topic-chip">Hashing</span>
+        <span class="topic-chip">Arrays + Prefix Sum</span>
+        <span class="topic-chip">Sorting</span>
+        <span class="topic-chip">Simulation</span>
+      </div>
+      <div class="divider">Phase 2 — Core structures (months 4–7)</div>
+      <div class="topic-list">
+        <span class="topic-chip">Linked List</span>
+        <span class="topic-chip">Stack & Queue</span>
+        <span class="topic-chip">Trees DFS/BFS</span>
+        <span class="topic-chip">BST</span>
+        <span class="topic-chip">Backtracking</span>
+        <span class="topic-chip">Heaps</span>
+        <span class="topic-chip">Greedy</span>
+        <span class="topic-chip">Monotonic Stack</span>
+      </div>
+      <div class="divider">Phase 3 — Advanced (months 7–10)</div>
+      <div class="topic-list">
+        <span class="topic-chip">DP 1D</span>
+        <span class="topic-chip">DP 2D / Grid</span>
+        <span class="topic-chip">DP Stocks</span>
+        <span class="topic-chip">Graphs BFS/DFS</span>
+        <span class="topic-chip">Topo Sort</span>
+        <span class="topic-chip">Dijkstra + DSU</span>
+        <span class="topic-chip">Trie</span>
+        <span class="topic-chip">Intervals</span>
+        <span class="topic-chip">Bit Manipulation</span>
+      </div>
+      <div class="divider">Resources</div>
+      <div class="resources">
+        <a class="resource-card" href="https://www.youtube.com/playlist?list=PLbJhGqY-mq47k_WLUtzVjmarUm1EuXPj2" target="_blank">
+          <div class="rc-icon">▶</div>
+          <div class="rc-body">
+            <div class="rc-top">
+              <span class="rc-name">Padho with Pratyush — DSA Patterns</span>
+              <span class="rc-tag tag-free">FREE</span>
+              <span class="rc-tag tag-yt">YouTube</span>
+              <span class="rc-tag tag-must">YOUR PRIMARY</span>
+            </div>
+            <div class="rc-desc">Pattern-first approach. Watch → solve MAANG sheet problems same day. 98 videos covering all patterns.</div>
+            <span class="rc-link">youtube.com/playlist?list=PLbJhGqY-mq47k_WLUtzVjmarUm1EuXPj2</span>
+          </div>
+        </a>
+        <a class="resource-card" href="https://www.youtube.com/@takeUforward" target="_blank">
+          <div class="rc-icon">▶</div>
+          <div class="rc-body">
+            <div class="rc-top">
+              <span class="rc-name">Striver (TakeUForward)</span>
+              <span class="rc-tag tag-free">FREE</span>
+              <span class="rc-tag tag-yt">YouTube</span>
+              <span class="rc-tag tag-must">BACKUP</span>
+            </div>
+            <div class="rc-desc">Use when Pratyush hasn't covered a topic yet (graphs, DP, trees). Gold standard for DSA in India.</div>
+            <span class="rc-link">youtube.com/@takeUforward</span>
+          </div>
+        </a>
+      </div>
+      <div class="milestone">
+        <div class="milestone-icon">🎯</div>
+        <div class="milestone-text">
+          <strong>Milestone after month 6</strong>
+          Solve Easy in 15 min · Medium in 35 min without hints · 130+ problems done from MAANG sheet
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <div class="arrow">↓</div>
+
+  <!-- STAGE 3 -->
+  <div class="stage s3">
+    <div class="stage-header">
+      <div class="stage-num">3</div>
+      <div class="stage-title-block">
+        <h2>CS Fundamentals — OS, DBMS, CN (Month 2–5)</h2>
+        <p>Do in parallel with DSA — 1 hour per day alongside DSA. Every interview asks these.</p>
+      </div>
+    </div>
+    <div class="stage-body">
+      <div class="note amber">These are asked in every screening round and tech interview — not just MAANG. Learn once, use forever.</div>
+
+      <div class="divider">Operating Systems</div>
+      <div class="topic-list">
+        <span class="topic-chip">Processes & threads</span>
+        <span class="topic-chip">Deadlock</span>
+        <span class="topic-chip">Memory management</span>
+        <span class="topic-chip">Virtual memory</span>
+        <span class="topic-chip">CPU scheduling</span>
+        <span class="topic-chip">Semaphores & mutex</span>
+      </div>
+      <a class="resource-card" href="https://www.youtube.com/playlist?list=PLBlnK6fEyqRiVhbXDGLXDk_OQAeuVcp2O" target="_blank">
+        <div class="rc-icon">▶</div>
+        <div class="rc-body">
+          <div class="rc-top">
+            <span class="rc-name">OS Playlist — Neso Academy</span>
+            <span class="rc-tag tag-free">FREE</span>
+            <span class="rc-tag tag-yt">YouTube</span>
+            <span class="rc-tag tag-must">BEST FOR OS</span>
+          </div>
+          <div class="rc-desc">Crystal clear explanations with diagrams. Covers every OS topic asked in interviews. Watch at 1.5x.</div>
+          <span class="rc-link">youtube.com/playlist?list=PLBlnK6fEyqRiVhbXDGLXDk_OQAeuVcp2O</span>
+        </div>
+      </a>
+
+      <div class="divider" style="margin-top:1rem">DBMS + SQL</div>
+      <div class="topic-list">
+        <span class="topic-chip">ACID properties</span>
+        <span class="topic-chip">Normalization</span>
+        <span class="topic-chip">Indexing</span>
+        <span class="topic-chip">Transactions</span>
+        <span class="topic-chip">SQL joins</span>
+        <span class="topic-chip">NoSQL vs SQL</span>
+        <span class="topic-chip">Sharding</span>
+      </div>
+      <a class="resource-card" href="https://www.youtube.com/watch?v=dl00fOOYLOM" target="_blank">
+        <div class="rc-icon">▶</div>
+        <div class="rc-body">
+          <div class="rc-top">
+            <span class="rc-name">Complete DBMS — CodeHelp (Love Babbar)</span>
+            <span class="rc-tag tag-free">FREE</span>
+            <span class="rc-tag tag-yt">YouTube</span>
+            <span class="rc-tag tag-must">BEST FOR DBMS</span>
+          </div>
+          <div class="rc-desc">11+ hour complete DBMS course. Covers ACID, normalization, indexing, sharding, CAP theorem — all interview topics in one video.</div>
+          <span class="rc-link">youtube.com/watch?v=dl00fOOYLOM</span>
+        </div>
+      </a>
+
+      <div class="divider" style="margin-top:1rem">Computer Networks</div>
+      <div class="topic-list">
+        <span class="topic-chip">HTTP/HTTPS</span>
+        <span class="topic-chip">TCP vs UDP</span>
+        <span class="topic-chip">DNS</span>
+        <span class="topic-chip">OSI model</span>
+        <span class="topic-chip">REST APIs</span>
+        <span class="topic-chip">Load balancers</span>
+      </div>
+      <a class="resource-card" href="https://www.youtube.com/playlist?list=PLBlnK6fEyqRgMCUAG0XRw78UA8qnv6jEx" target="_blank">
+        <div class="rc-icon">▶</div>
+        <div class="rc-body">
+          <div class="rc-top">
+            <span class="rc-name">Computer Networks — Neso Academy</span>
+            <span class="rc-tag tag-free">FREE</span>
+            <span class="rc-tag tag-yt">YouTube</span>
+            <span class="rc-tag tag-must">BEST FOR CN</span>
+          </div>
+          <div class="rc-desc">Same channel as OS — consistent teaching style. Cover only interview-relevant topics: OSI, TCP/IP, HTTP, DNS, routing.</div>
+          <span class="rc-link">youtube.com/playlist?list=PLBlnK6fEyqRgMCUAG0XRw78UA8qnv6jEx</span>
+        </div>
+      </a>
+
+      <div class="divider" style="margin-top:1rem">OOP Concepts</div>
+      <a class="resource-card" href="https://www.youtube.com/watch?v=i_5pvt7ag7E" target="_blank">
+        <div class="rc-icon">▶</div>
+        <div class="rc-body">
+          <div class="rc-top">
+            <span class="rc-name">OOP in C++ — CodeWithHarry</span>
+            <span class="rc-tag tag-free">FREE</span>
+            <span class="rc-tag tag-yt">YouTube</span>
+          </div>
+          <div class="rc-desc">All 4 pillars of OOP in C++ — encapsulation, abstraction, inheritance, polymorphism. Clear Hindi explanation with code.</div>
+          <span class="rc-link">youtube.com/watch?v=i_5pvt7ag7E</span>
+        </div>
+      </a>
+    </div>
+  </div>
+
+  <div class="arrow">↓</div>
+
+  <!-- STAGE 4: FIRST SWITCH -->
+  <div class="stage s5">
+    <div class="stage-header">
+      <div class="stage-num">4</div>
+      <div class="stage-title-block">
+        <h2>First Job Switch (Month 8–10) → 6–12 LPA</h2>
+        <p>Leave your 2.4 LPA job. Target mid-tier product companies.</p>
+      </div>
+    </div>
+    <div class="stage-body">
+      <div class="note amber">This switch is the most important move in year 1. Don't stay at 2.4 LPA. Even jumping to 6 LPA gives you real product experience on your resume — which MAANG recruiters look for.</div>
+      <div class="topic-list">
+        <span class="topic-chip">Zoho</span>
+        <span class="topic-chip">Freshworks</span>
+        <span class="topic-chip">PhonePe</span>
+        <span class="topic-chip">Razorpay</span>
+        <span class="topic-chip">Zerodha</span>
+        <span class="topic-chip">Groww</span>
+        <span class="topic-chip">Meesho</span>
+        <span class="topic-chip">Well-funded startups</span>
+      </div>
+      <div class="resources">
+        <a class="resource-card" href="https://www.naukri.com" target="_blank">
+          <div class="rc-icon">🔍</div>
+          <div class="rc-body">
+            <div class="rc-top"><span class="rc-name">Naukri.com</span><span class="rc-tag tag-free">FREE</span></div>
+            <div class="rc-desc">Best for Indian product company jobs. Set job alert: "Software Engineer" + "Product based" + your city.</div>
+            <span class="rc-link">naukri.com</span>
+          </div>
+        </a>
+        <a class="resource-card" href="https://www.linkedin.com/jobs" target="_blank">
+          <div class="rc-icon">💼</div>
+          <div class="rc-body">
+            <div class="rc-top"><span class="rc-name">LinkedIn Jobs</span><span class="rc-tag tag-free">FREE</span></div>
+            <div class="rc-desc">Apply AND get referrals. Connect with engineers at target companies. One referral = 3x shortlist rate.</div>
+            <span class="rc-link">linkedin.com/jobs</span>
+          </div>
+        </a>
+      </div>
+    </div>
+  </div>
+
+  <div class="arrow">↓</div>
+
+  <!-- STAGE 5: SYSTEM DESIGN -->
+  <div class="stage s4">
+    <div class="stage-header">
+      <div class="stage-num">5</div>
+      <div class="stage-title-block">
+        <h2>System Design — HLD + LLD (Month 10–18)</h2>
+        <p>The thing that separates SDE-1 from SDE-2. Cannot skip this.</p>
+      </div>
+    </div>
+    <div class="stage-body">
+      <div class="note coral">Every MAANG SDE-2 interview has at least one system design round. If you can't design Twitter or WhatsApp, you won't pass — no matter how good your DSA is.</div>
+
+      <div class="divider">High Level Design (HLD) — How systems are built at scale</div>
+      <div class="topic-list">
+        <span class="topic-chip">Load balancers</span>
+        <span class="topic-chip">CDN</span>
+        <span class="topic-chip">Caching (Redis)</span>
+        <span class="topic-chip">Databases (SQL/NoSQL)</span>
+        <span class="topic-chip">Message queues (Kafka)</span>
+        <span class="topic-chip">Sharding</span>
+        <span class="topic-chip">Consistent hashing</span>
+        <span class="topic-chip">CAP theorem</span>
+        <span class="topic-chip">Microservices</span>
+        <span class="topic-chip">API design</span>
+      </div>
+      <div class="resources">
+        <a class="resource-card" href="https://www.youtube.com/channel/UCRPMAqdtSgd0Ipeef7iFsKw" target="_blank">
+          <div class="rc-icon">▶</div>
+          <div class="rc-body">
+            <div class="rc-top">
+              <span class="rc-name">Gaurav Sen — System Design</span>
+              <span class="rc-tag tag-free">FREE</span>
+              <span class="rc-tag tag-yt">YouTube</span>
+              <span class="rc-tag tag-must">BEST FOR HLD</span>
+            </div>
+            <div class="rc-desc">The gold standard for system design in India. Explains load balancers, consistent hashing, Kafka, Redis with visual diagrams. Start here.</div>
+            <span class="rc-link">youtube.com/channel/UCRPMAqdtSgd0Ipeef7iFsKw</span>
+          </div>
+        </a>
+        <a class="resource-card" href="https://www.youtube.com/@sudoCode" target="_blank">
+          <div class="rc-icon">▶</div>
+          <div class="rc-body">
+            <div class="rc-top">
+              <span class="rc-name">Sudo Code — System Design</span>
+              <span class="rc-tag tag-free">FREE</span>
+              <span class="rc-tag tag-yt">YouTube</span>
+            </div>
+            <div class="rc-desc">Designs real systems like Uber, Netflix, Twitter step-by-step. Great complement to Gaurav Sen's theory videos.</div>
+            <span class="rc-link">youtube.com/@sudoCode</span>
+          </div>
+        </a>
+      </div>
+
+      <div class="divider" style="margin-top:1rem">Low Level Design (LLD) — How code is structured inside</div>
+      <div class="topic-list">
+        <span class="topic-chip">SOLID principles</span>
+        <span class="topic-chip">Singleton pattern</span>
+        <span class="topic-chip">Factory pattern</span>
+        <span class="topic-chip">Observer pattern</span>
+        <span class="topic-chip">Strategy pattern</span>
+        <span class="topic-chip">Design parking lot</span>
+        <span class="topic-chip">Design chess game</span>
+        <span class="topic-chip">Design LRU cache</span>
+      </div>
+      <a class="resource-card" href="https://www.youtube.com/playlist?list=PL6W8uoQQ2c61X_9e6Net0WdYZidm7zooW" target="_blank">
+        <div class="rc-icon">▶</div>
+        <div class="rc-body">
+          <div class="rc-top">
+            <span class="rc-name">LLD Playlist — Concept & Coding</span>
+            <span class="rc-tag tag-free">FREE</span>
+            <span class="rc-tag tag-yt">YouTube</span>
+            <span class="rc-tag tag-must">BEST FOR LLD</span>
+          </div>
+          <div class="rc-desc">Best free LLD resource available. Covers SOLID, all design patterns, real interview problems like parking lot, book my show, snake & ladder with code.</div>
+          <span class="rc-link">youtube.com/playlist?list=PL6W8uoQQ2c61X_9e6Net0WdYZidm7zooW</span>
+        </div>
+      </a>
+
+      <div class="milestone">
+        <div class="milestone-icon">🎯</div>
+        <div class="milestone-text">
+          <strong>Milestone after month 14</strong>
+          Can design URL shortener, Twitter feed, WhatsApp from scratch on whiteboard in 45 min
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <div class="arrow">↓</div>
+
+  <!-- STAGE 6: PYTHON + PROJECTS -->
+  <div class="stage s6">
+    <div class="stage-header">
+      <div class="stage-num">6</div>
+      <div class="stage-title-block">
+        <h2>Python + Enterprise Projects (Month 6–18, parallel)</h2>
+        <p>Learn Python for building real backend projects — this builds your resume</p>
+      </div>
+    </div>
+    <div class="stage-body">
+      <div class="note teal">C++ = interviews. Python = projects. Smart combination. Python is the industry standard for backend, APIs, and AI-powered products at MAANG level.</div>
+
+      <div class="divider">Learn Python</div>
+      <div class="resources">
+        <a class="resource-card" href="https://www.youtube.com/watch?v=_uQrJ0TkZlc" target="_blank">
+          <div class="rc-icon">▶</div>
+          <div class="rc-body">
+            <div class="rc-top">
+              <span class="rc-name">Python Full Course — Programming with Mosh</span>
+              <span class="rc-tag tag-free">FREE</span>
+              <span class="rc-tag tag-yt">YouTube</span>
+              <span class="rc-tag tag-must">START HERE</span>
+            </div>
+            <div class="rc-desc">6-hour beginner course. Clean, structured, project-based. Best intro to Python if you already know C++. You'll pick it up fast.</div>
+            <span class="rc-link">youtube.com/watch?v=_uQrJ0TkZlc</span>
+          </div>
+        </a>
+        <a class="resource-card" href="https://www.youtube.com/@coreyms" target="_blank">
+          <div class="rc-icon">▶</div>
+          <div class="rc-body">
+            <div class="rc-top">
+              <span class="rc-name">Corey Schafer — Python & Django</span>
+              <span class="rc-tag tag-free">FREE</span>
+              <span class="rc-tag tag-yt">YouTube</span>
+              <span class="rc-tag tag-must">INTERMEDIATE</span>
+            </div>
+            <div class="rc-desc">Best for intermediate Python — OOP, decorators, generators, Flask, Django. Feels like a university course. Industry standard channel.</div>
+            <span class="rc-link">youtube.com/@coreyms</span>
+          </div>
+        </a>
+      </div>
+
+      <div class="divider" style="margin-top:1rem">Build These Projects (for your resume)</div>
+      <div class="resource-grid">
+        <div class="resource-card" style="cursor:default">
+          <div class="rc-icon">🔧</div>
+          <div class="rc-body">
+            <div class="rc-name" style="margin-bottom:0.3rem">REST API Backend</div>
+            <div class="rc-desc">FastAPI or Django REST. User auth, CRUD, PostgreSQL, Docker. This is what every product company uses.</div>
+          </div>
+        </div>
+        <div class="resource-card" style="cursor:default">
+          <div class="rc-icon">💬</div>
+          <div class="rc-body">
+            <div class="rc-name" style="margin-bottom:0.3rem">Real-time Chat App</div>
+            <div class="rc-desc">WebSockets + Redis + FastAPI. Shows you understand distributed systems in practice.</div>
+          </div>
+        </div>
+        <div class="resource-card" style="cursor:default">
+          <div class="rc-icon">🤖</div>
+          <div class="rc-body">
+            <div class="rc-name" style="margin-bottom:0.3rem">AI-powered Tool</div>
+            <div class="rc-desc">Build something with OpenAI API or HuggingFace. Every company wants AI experience now.</div>
+          </div>
+        </div>
+        <div class="resource-card" style="cursor:default">
+          <div class="rc-icon">☁</div>
+          <div class="rc-body">
+            <div class="rc-name" style="margin-bottom:0.3rem">Deploy on AWS/GCP</div>
+            <div class="rc-desc">Deploy your project on cloud. EC2 or App Engine. Shows real-world engineering skills.</div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <div class="arrow">↓</div>
+
+  <!-- STAGE 7: BEHAVIOURAL + MAANG GRIND -->
+  <div class="stage s7">
+    <div class="stage-header">
+      <div class="stage-num">7</div>
+      <div class="stage-title-block">
+        <h2>Behavioural Interviews + MAANG Mock Grind (Month 18–24)</h2>
+        <p>The final preparation before you apply to Amazon, Google, Meta, Microsoft</p>
+      </div>
+    </div>
+    <div class="stage-body">
+      <div class="note coral">Amazon especially is 50% DSA + 50% Leadership Principles stories. Candidates fail Amazon not because of bad coding but because they didn't prepare STAR stories.</div>
+
+      <div class="divider">Amazon — 16 Leadership Principles (STAR method)</div>
+      <div class="topic-list">
+        <span class="topic-chip">Customer Obsession</span>
+        <span class="topic-chip">Ownership</span>
+        <span class="topic-chip">Invent & Simplify</span>
+        <span class="topic-chip">Bias for Action</span>
+        <span class="topic-chip">Think Big</span>
+        <span class="topic-chip">Deliver Results</span>
+        <span class="topic-chip">Learn & Be Curious</span>
+        <span class="topic-chip">Dive Deep</span>
+      </div>
+      <div class="resources">
+        <a class="resource-card" href="https://www.youtube.com/watch?v=kTUe116UfYc" target="_blank">
+          <div class="rc-icon">▶</div>
+          <div class="rc-body">
+            <div class="rc-top">
+              <span class="rc-name">Amazon LP Interview Q&A 2025 — PassMyInterview</span>
+              <span class="rc-tag tag-free">FREE</span>
+              <span class="rc-tag tag-yt">YouTube</span>
+              <span class="rc-tag tag-must">MUST WATCH</span>
+            </div>
+            <div class="rc-desc">Real STAR answers for all 16 Amazon Leadership Principles. Watch this before any Amazon interview.</div>
+            <span class="rc-link">youtube.com/watch?v=kTUe116UfYc</span>
+          </div>
+        </a>
+        <a class="resource-card" href="https://amazon.jobs/content/en/how-we-hire/sde-ii-interview-prep" target="_blank">
+          <div class="rc-icon">📄</div>
+          <div class="rc-body">
+            <div class="rc-top">
+              <span class="rc-name">Amazon Official SDE-2 Prep Guide</span>
+              <span class="rc-tag tag-free">FREE</span>
+              <span class="rc-tag tag-doc">OFFICIAL DOC</span>
+              <span class="rc-tag tag-must">READ THIS</span>
+            </div>
+            <div class="rc-desc">Amazon's own guide for SDE-2 interviews. Tells you exactly what they assess, sample coding questions, and design expectations.</div>
+            <span class="rc-link">amazon.jobs/content/en/how-we-hire/sde-ii-interview-prep</span>
+          </div>
+        </a>
+      </div>
+
+      <div class="divider" style="margin-top:1rem">Phase 4 of MAANG Sheet — Company-tagged Problems</div>
+      <div class="topic-list">
+        <span class="topic-chip">Google tagged</span>
+        <span class="topic-chip">Amazon tagged</span>
+        <span class="topic-chip">Meta tagged</span>
+        <span class="topic-chip">Microsoft tagged</span>
+        <span class="topic-chip">Hard final boss problems</span>
+        <span class="topic-chip">Contest patterns</span>
+      </div>
+      <a class="resource-card" href="https://leetcode.com/contest/" target="_blank">
+        <div class="rc-icon">⚡</div>
+        <div class="rc-body">
+          <div class="rc-top">
+            <span class="rc-name">LeetCode Weekly Contests</span>
+            <span class="rc-tag tag-free">FREE</span>
+            <span class="rc-tag tag-must">EVERY WEEKEND</span>
+          </div>
+          <div class="rc-desc">Do both Saturday and Sunday contests every week. The MAANG sheet says this clearly. Contests build speed + pressure handling that practice alone cannot.</div>
+          <span class="rc-link">leetcode.com/contest</span>
+        </div>
+      </a>
+
+      <div class="milestone">
+        <div class="milestone-icon">🎯</div>
+        <div class="milestone-text">
+          <strong>Second job switch — month 18–20</strong>
+          Target Flipkart, Swiggy, CRED, Zepto, Meesho → SDE-2 level, 15–25 LPA. This makes your resume MAANG-ready.
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <div class="arrow">↓</div>
+
+  <!-- FINAL -->
+  <div class="stage s6">
+    <div class="stage-header">
+      <div class="stage-num">✓</div>
+      <div class="stage-title-block">
+        <h2>MAANG SDE-2 — Year 3–4</h2>
+        <p>Apply to Amazon · Google · Meta · Microsoft with confidence</p>
+      </div>
+    </div>
+    <div class="stage-body">
+      <div class="resource-grid">
+        <div class="resource-card" style="cursor:default;border-color:rgba(0,229,195,0.3)">
+          <div class="rc-icon">🟢</div>
+          <div class="rc-body">
+            <div class="rc-name" style="color:var(--teal);margin-bottom:0.3rem">Amazon</div>
+            <div class="rc-desc">DSA (medium-hard) + System Design + 16 LP stories. Most approachable of the 4. Apply first.</div>
+          </div>
+        </div>
+        <div class="resource-card" style="cursor:default;border-color:rgba(167,139,250,0.3)">
+          <div class="rc-icon">🔵</div>
+          <div class="rc-body">
+            <div class="rc-name" style="color:var(--purple);margin-bottom:0.3rem">Google</div>
+            <div class="rc-desc">Hardest DSA bar. Graph + DP heavy. Needs 250–300 LeetCode problems solved. Apply 2nd.</div>
+          </div>
+        </div>
+        <div class="resource-card" style="cursor:default;border-color:rgba(251,191,36,0.3)">
+          <div class="rc-icon">🟡</div>
+          <div class="rc-body">
+            <div class="rc-name" style="color:var(--amber);margin-bottom:0.3rem">Meta</div>
+            <div class="rc-desc">Arrays, strings, BFS, trees + strong behavioural on collaboration and impact stories.</div>
+          </div>
+        </div>
+        <div class="resource-card" style="cursor:default;border-color:rgba(96,165,250,0.3)">
+          <div class="rc-icon">🔷</div>
+          <div class="rc-body">
+            <div class="rc-name" style="color:var(--blue);margin-bottom:0.3rem">Microsoft</div>
+            <div class="rc-desc">Most balanced — design + trees + moderate DP. OOP design is important. Good first MAANG attempt.</div>
+          </div>
+        </div>
+      </div>
+      <div class="note teal" style="margin-top:1rem">Total compensation at SDE-2 India: Amazon ₹25–35 LPA · Google ₹30–50 LPA · Meta ₹28–45 LPA · Microsoft ₹22–38 LPA (base + RSU + bonus combined)</div>
+    </div>
+  </div>
+
+  <!-- FOOTER -->
+  <div class="footer">
+    <h3>Your daily schedule right now</h3>
+    <p>
+      <strong style="color:var(--teal)">Morning (1 hr)</strong> — Watch Pratyush episode → solve 3–5 MAANG sheet problems in C++ same day<br>
+      <strong style="color:var(--purple)">Evening (45 min)</strong> — OS / DBMS / CN (Neso Academy) — 1 topic per day<br>
+      <strong style="color:var(--amber)">Weekend</strong> — LeetCode contest (both days) + review wrong answers<br>
+      <strong style="color:var(--green)">Consistency beats speed</strong> — 2 problems/day every day beats 20 problems on Sunday
+    </p>
+  </div>
+
+</div>
+</body>
+</html>
